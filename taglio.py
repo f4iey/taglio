@@ -26,7 +26,7 @@ if options.help and len(args) == 0:
 
 # first, try to open the serial port
 print("Using port ", ser.name, "...\n")
-ser = serial.Serial(options.port)
+ser = serial.Serial(options.port, baudrate=9600)
 
 if options.info:
     print_ack("V?")
