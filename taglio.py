@@ -115,6 +115,6 @@ def read():
         print("Read timeout\n")
         return
     return out
-def print_ack(cmd)
+def print_ack(cmd):
     send(cmd)
     print(read())
