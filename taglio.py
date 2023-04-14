@@ -4,7 +4,7 @@ from optparse import OptionParser
 
 # functions
 def send(cmd):
-    ser.write((cmd + "\r").encode('ascii', 'ignore'))
+    ser.write((cmd + "\n").encode('ascii', 'ignore'))
 def read():
     out = ser.readlines().decode()
     if not out:
