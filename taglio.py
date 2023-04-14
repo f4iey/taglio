@@ -32,9 +32,6 @@ parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
-# Check if the help option was specified
-if len(args) == 0:
-    parser.print_help()
 
 
 # first, try to open the serial port
@@ -70,8 +67,12 @@ if options.erase:
 if options.command:
     print(options.command)
     print_ack(options.command)
+
+# Check if the help option was specified
+if len(args) == 0:
+    parser.print_help()
 # All options passed, we can send file if th file path has been specified
-if len(args) > 0:
+else:
     # Check is saber is wriyable
     send("WR?")
     if read() == 'OK, Write Ready':
