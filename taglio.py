@@ -60,16 +60,16 @@ if options.list:
     print_multi("LIST?")
 if options.erase:
     send("WR?")
-    if read() == 'OK, Write Ready':
+    if read().startswith("OK, Write Ready"):
         print_ack("ERASE=ALL")
         ser.timeout = 5
-        inByte = ser.read()
+        inByte = ser.read().decode()
         while inByte != 10 or inByte < 65:
-            print(chr(inByte), end='')
-            inByte = ser.read()
+            print(inByte, end='')
+            inByte = ser.read().decode()
             if not inByte:
-                print("Error: communication timed out...")
-                exit(1)
+                print("Exiting...")
+                exit(0)
         ser.timeout = 0.5
         print('')
         print(read())
@@ -84,7 +84,7 @@ if options.command:
 if len(args) > 0:
     # Check is saber is wriyable
     send("WR?")
-    if read() == 'OK, Write Ready':
+    if read().startswith("OK, Write Ready"):
         print("Saber ready to write to serial flash")
         # Check if enough space is available
         with open(args[0], 'rb') as f:
