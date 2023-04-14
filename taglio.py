@@ -1,4 +1,5 @@
 import serial
+import sys
 import os
 from optparse import OptionParser
 
@@ -38,10 +39,10 @@ parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
-
 # Check if the help option was specified
-if len(args) == 0 and not options.__dict__:
+if len(args) == 0 and not options.info and not options.list and not options.erase and not options.command and not options.verbose:
     parser.print_help()
+    exit()
 
 # first, try to open the serial port
 print("Trying port ", options.port, "...\n")
@@ -49,6 +50,7 @@ try:
     ser = serial.Serial(options.port, baudrate=9600, timeout=0.5)
 except serial.serialutil.SerialException as e:
     print("\033[31mError: ", e, "\033[0m")
+    exit()
 
 
 if options.info:
