@@ -6,7 +6,7 @@ from optparse import OptionParser
 def send(cmd):
     ser.write((cmd + "\n").encode('ascii', 'ignore'))
 def read():
-    out = ser.readlines().decode()
+    out = ser.readline().decode()
     if not out:
         print("Read timeout\n")
         return
@@ -33,6 +33,9 @@ parser.set_defaults(port='/dev/ttyACM0')
 (options, args) = parser.parse_args()
 
 
+# Check if the help option was specified
+if len(args) == 0 and not options.__dict__:
+    parser.print_help()
 
 # first, try to open the serial port
 print("Trying port ", options.port, "...\n")
@@ -68,11 +71,8 @@ if options.command:
     print(options.command)
     print_ack(options.command)
 
-# Check if the help option was specified
-if len(args) == 0:
-    parser.print_help()
 # All options passed, we can send file if th file path has been specified
-else:
+if len(args) > 0:
     # Check is saber is wriyable
     send("WR?")
     if read() == 'OK, Write Ready':
