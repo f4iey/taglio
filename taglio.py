@@ -8,12 +8,18 @@ def send(cmd):
 def read():
     out = ser.readline().decode()
     if not out:
-        print("Read timeout\n")
+        print("Nothing more to read.")
         return
     return out
 def print_ack(cmd):
     send(cmd)
     print(read())
+def print_multi(cmd):
+    send(cmd)
+    buffer = read()
+    while buffer:
+        print(buffer, end='')
+        buffer = read()
 
 parser = OptionParser(usage='taglio [-h -v -i -l --erase-all -p [PORT] -c [ASCII]] [PATH TO FILE]')
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
@@ -40,7 +46,7 @@ if len(args) == 0 and not options.__dict__:
 # first, try to open the serial port
 print("Trying port ", options.port, "...\n")
 try:
-    ser = serial.Serial(options.port, baudrate=9600)
+    ser = serial.Serial(options.port, baudrate=9600, timeout=0.5)
 except serial.serialutil.SerialException as e:
     print("\033[31mError: ", e, "\033[0m")
 
@@ -49,18 +55,20 @@ if options.info:
     print_ack("V?")
     print_ack("S?")
 if options.list:
-    print_ack("LIST?")
+    print_multi("LIST?")
 if options.erase:
     send("WR?")
     if read() == 'OK, Write Ready':
         print_ack("ERASE=ALL")
-        inByte = ser.read(timeout=5)
+        ser.timeout = 5
+        inByte = ser.read()
         while inByte != 10 or inByte < 65:
             print(chr(inByte), end='')
-            inByte = ser.read(timeout=5)
+            inByte = ser.read()
             if not inByte:
                 print("Error: communication timed out...")
                 exit(1)
+        ser.timeout = 0.5
         print('')
         print(read())
         print(read())
@@ -68,8 +76,7 @@ if options.erase:
         print("Error: Saber not ready to Write file, aborting...")
         exit(1)
 if options.command:
-    print(options.command)
-    print_ack(options.command)
+    print_multi(options.command)
 
 # All options passed, we can send file if th file path has been specified
 if len(args) > 0:
