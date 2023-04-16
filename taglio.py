@@ -22,7 +22,7 @@ def print_multi(cmd):
         print(buffer, end='')
         buffer = read()
 
-parser = OptionParser(usage='taglio [-h -v -i -l -s --erase-all -p [PORT] -c [ASCII]] [PATH TO FILE]')
+parser = OptionParser(usage='taglio [OPTION] [PATH TO FILE]')
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
                   help="verbose display for debugging")
 parser.add_option("-i", "--info",
@@ -36,12 +36,14 @@ parser.add_option("-p", "--port", action="store", dest="port", type="string",
 parser.add_option("-c", "--command", action="store", dest="command", default=False, type="string",
                   help="send raw serial command")
 parser.add_option("-s", "--sounds", action="store_true", dest="slist", default=False, help="list config sound filenames")
+parser.add_option("-S", "--save", action="store_true", dest="save", default=False, help="save config in non-volatile memory")
+parser.add_option("-R", "--reset", action="store_true", dest="reset", default=False, help="reset back to default FW config")
 parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(args) == 0 and not options.info and not options.list and not options.erase and not options.command and not options.verbose and not options.slist:
+if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.verbose or options.slist or options.save or options.reset):
     parser.print_help()
     exit()
 
@@ -66,6 +68,10 @@ if options.slist:
     print_ack("sSW?")
     print_ack("sSMA?")
     print_ack("sSMB?")
+if options.save:
+    print_ack("SAVE")
+if options.reset:
+    print_ack("RESET")
 if options.erase:
     send("WR?")
     if read().startswith("OK, Write Ready"):
