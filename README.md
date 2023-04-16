@@ -6,13 +6,25 @@ It is yet, another program to write specific commands and sound files to [polari
 The main goal is to simply make a portable program that runs on most popular architectures and operating systems.
 
 ## Prerequisites
-To use this, you will of course need to have Python installed on your system with the following dependencies:
+To use this, you will of course need to have `Python` installed on your system with the following dependencies:
 ```sh
 pip install pyserial dateutil
 ```
 
 ## Usage
-All info available in the help section
+Clone the repository
+__Using Git:__
+```sh
+git clone https://github.com/f4iey/taglio.git
+cd taglio
+```
+__By downloading the source code as an archive:__
+```sh
+curl -fLO https://github.com/f4iey/taglio/archive/refs/heads/main.zip
+```
+If you are not familiar with one of these below, just click the *Download ZIP* button under the `Code` dropdown button.
+
+For the program itself, all info are available in the help section by running `taglio` or `python taglio.py`
 ```sh
 Usage: taglio [-h -v -i -l --erase-all -p [PORT] -c [ASCII]] [PATH TO FILE]
 
