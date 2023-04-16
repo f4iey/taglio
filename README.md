@@ -28,7 +28,7 @@ If you are not familiar with one of these below, just click the *Download ZIP* b
 
 For the program itself, all info are available in the help section by running `taglio` or `python taglio.py`
 ```sh
-Usage: taglio [-h -v -i -l --erase-all -p [PORT] -c [ASCII]] [PATH TO FILE]
+Usage: taglio [OPTION] [PATH TO FILE]
 
 Options:
   -h, --help            show this help message and exit
@@ -39,6 +39,9 @@ Options:
   -p PORT, --port=PORT  set the serial port (e.g /dev/ttyUSB0 or COM3)
   -c COMMAND, --command=COMMAND
                         send raw serial command
+  -s, --sounds          list config sound filenames
+  -S, --save            save config in non-volatile memory
+  -R, --reset           reset back to default FW config
 ```
 
 
