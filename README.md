@@ -7,9 +7,11 @@ The main goal is to simply make a portable program that runs on most popular arc
 
 ## Prerequisites
 To use this, you will of course need to have `Python` installed on your system with the following dependencies:
+__Using pip:__
 ```sh
-pip install pyserial dateutil
+pip install pyserial tqdm
 ```
+*If your python libraries are already coped with your package manager, it is recommended to install these two libs using it.*
 
 ## Usage
 Clone the repository

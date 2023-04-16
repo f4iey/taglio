@@ -1,7 +1,7 @@
 import serial
-import sys
 import os
 from optparse import OptionParser
+from tqdm import tqdm
 
 # functions
 def send(cmd):
@@ -113,11 +113,12 @@ if len(args) > 0:
             send("WR=" + os.path.basename(args[0]) + ',' + str(fsize))
             if read().startswith('OK, Write'):
                 byte = f.read(1)
-                while byte != b'':
-                    # send the file byte per byte to serial
-                    ser.write(byte)
-                    byte = f.read(1)
-                    # future add rmaining bytes time with dateutil
+                with tqdm(total=fsize) as pbar:
+                    while byte != b'':
+                        # send the file byte per byte to serial
+                        ser.write(byte)
+                        byte = f.read(1)
+                        pbar.update(1)
                 print("File ", os.path.basename(args[0]), " written to saber")
             else:
                 print("Protocol error")
