@@ -22,7 +22,7 @@ def print_multi(cmd):
         print(buffer, end='')
         buffer = read()
 
-parser = OptionParser(usage='taglio [-h -v -i -l --erase-all -p [PORT] -c [ASCII]] [PATH TO FILE]')
+parser = OptionParser(usage='taglio [-h -v -i -l -s --erase-all -p [PORT] -c [ASCII]] [PATH TO FILE]')
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
                   help="verbose display for debugging")
 parser.add_option("-i", "--info",
