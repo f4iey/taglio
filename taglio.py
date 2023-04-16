@@ -35,12 +35,13 @@ parser.add_option("-p", "--port", action="store", dest="port", type="string",
                   help="set the serial port (e.g /dev/ttyUSB0 or COM3)")
 parser.add_option("-c", "--command", action="store", dest="command", default=False, type="string",
                   help="send raw serial command")
+parser.add_option("-s", "--sounds", action="store_true", dest="slist", default=False, help="list config sound filenames")
 parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(args) == 0 and not options.info and not options.list and not options.erase and not options.command and not options.verbose:
+if len(args) == 0 and not options.info and not options.list and not options.erase and not options.command and not options.verbose and not options.slist:
     parser.print_help()
     exit()
 
@@ -58,6 +59,13 @@ if options.info:
     print_ack("S?")
 if options.list:
     print_multi("LIST?")
+if options.slist:
+    print_ack("sON?")
+    print_ack("sOFF?")
+    print_ack("sCL?")
+    print_ack("sSW?")
+    print_ack("sSMA?")
+    print_ack("sSMB?")
 if options.erase:
     send("WR?")
     if read().startswith("OK, Write Ready"):
@@ -75,7 +83,7 @@ if options.erase:
         print(read())
         print(read())
     else:
-        print("Error: Saber not ready to Write file, aborting...")
+        print("Error: Saber not ready to write file, aborting...")
         exit(1)
 if options.command:
     print_multi(options.command)
