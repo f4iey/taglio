@@ -29,6 +29,8 @@ pip install -r requirements.txt
 *If your python libraries are already coped with your package manager, it is recommended to install these two libs using it.*
 For the program itself, all info are available in the help section by running `taglio` or `python taglio.py`
 
+In addition, it is possible to *flash the firmware* by *installing* an optional dependency: [tytools](https://github.com/Koromix/tytools/releases)
+
 ### Usage and options
 ```sh
 Usage: taglio [OPTION] [PATHS TO FILES]
