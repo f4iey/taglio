@@ -69,7 +69,8 @@ if len(args) == 0 and not (options.info or options.list or options.erase or opti
 if options.wavpath:
     convert_all(options.wavpath)
     print("All wav files have been converted to RAW")
-    exit()
+    if len(args) == 0:
+        exit()
 
 # Options requiring saber connection
 # first, try to open the serial port
