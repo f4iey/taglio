@@ -49,4 +49,9 @@ Options:
                         convert all wav files to raw
 ```
 
-
+Wildcards and multiple entries are supported
+```sh
+taglio path/to/files/*.RAW
+taglio path/to/file1.RAW
+taglio path/to.file2.RAW
+```
