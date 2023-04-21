@@ -26,8 +26,10 @@ def print_multi(cmd):
 def convert_all(input_path):
     # Converts all WAV files into RAW in the specified directory
     # set the input and output file patterns
+    if not input_path.endswith('/'):
+        input_path += '/'
     input_pattern = input_path + '*.wav'
-    output_pattern = input_path '{}.RAW'
+    output_pattern = input_path + '{}.RAW'
     t = sox.Transformer()
     t.set_output_format(file_type='raw')
     t.set_rate(44100)
