@@ -55,7 +55,7 @@ parser.add_option("-c", "--command", action="store", dest="command", default=Fal
 parser.add_option("-s", "--sounds", action="store_true", dest="slist", default=False, help="list config sound filenames")
 parser.add_option("-S", "--save", action="store_true", dest="save", default=False, help="save config in non-volatile memory")
 parser.add_option("-R", "--reset", action="store_true", dest="reset", default=False, help="reset back to default FW config")
-parser.add_option("-C", "--convert", action="store", dest="wavpath", default=False, type="string", help="converts all wav files to raw"
+parser.add_option("-C", "--convert", action="store", dest="wavpath", default=False, type="string", help="convert all wav files to raw")
 parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
