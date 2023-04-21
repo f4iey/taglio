@@ -31,8 +31,7 @@ def convert_all(input_path):
     input_pattern = input_path + '*.wav'
     output_pattern = '{}.RAW'
     t = sox.Transformer()
-    t.set_output_format(file_type='raw')
-    t.convert(samplerate=44100)
+    t.set_output_format(file_type='raw', bits=16, channels=1, rate=44100)
     # loop over the input files and apply the transformation
     for input_file in glob.glob(input_pattern):
         output_file = output_pattern.format(os.path.splitext(input_file)[0])
