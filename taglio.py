@@ -2,6 +2,8 @@ import serial
 import os
 from optparse import OptionParser
 from tqdm import tqdm
+import sox
+import glob
 
 # functions
 def send(cmd):
@@ -21,6 +23,19 @@ def print_multi(cmd):
     while buffer:
         print(buffer, end='')
         buffer = read()
+def convert_all(input_path):
+    # Converts all WAV files into RAW in the specified directory
+    # set the input and output file patterns
+    input_pattern = input_path + '*.wav'
+    output_pattern = input_path '{}.RAW'
+    t = sox.Transformer()
+    t.set_output_format(file_type='raw')
+    t.set_rate(44100)
+    # loop over the input files and apply the transformation
+    for input_file in glob.glob(input_pattern):
+        output_file = output_pattern.format(os.path.splitext(input_file)[0])
+        t.build(input_file, output_file)
+
 
 parser = OptionParser(usage='taglio [OPTION] [PATH TO FILE]')
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
@@ -38,15 +53,23 @@ parser.add_option("-c", "--command", action="store", dest="command", default=Fal
 parser.add_option("-s", "--sounds", action="store_true", dest="slist", default=False, help="list config sound filenames")
 parser.add_option("-S", "--save", action="store_true", dest="save", default=False, help="save config in non-volatile memory")
 parser.add_option("-R", "--reset", action="store_true", dest="reset", default=False, help="reset back to default FW config")
+parser.add_option("-C", "--convert", action="store", dest="wavpath", default=False, type="string", help="converts all wav files to raw"
 parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.verbose or options.slist or options.save or options.reset):
+if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.wavpath or options.verbose or options.slist or options.save or options.reset):
     parser.print_help()
     exit()
 
+# Other options not requiring saber connection
+if options.wavpath:
+    convert_all(options.wavpath)
+    print("All wav files have been converted to RAW")
+    exit()
+
+# Options requiring saber connection
 # first, try to open the serial port
 print("Trying port ", options.port, "...\n")
 try:
@@ -96,7 +119,7 @@ if options.command:
 
 # All options passed, we can send file if th file path has been specified
 if len(args) > 0:
-    # Check is saber is wriyable
+    # Check is saber is writable
     send("WR?")
     if read().startswith("OK, Write Ready"):
         print("Saber ready to write to serial flash")

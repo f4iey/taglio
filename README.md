@@ -5,15 +5,7 @@ It is yet, another program to write specific commands and sound files to [polari
 
 The main goal is to simply make a portable program that runs on most popular architectures and operating systems.
 
-## Prerequisites
-To use this, you will of course need to have `Python` installed on your system with the following dependencies:
-__Using pip:__
-```sh
-pip install pyserial tqdm
-```
-*If your python libraries are already coped with your package manager, it is recommended to install these two libs using it.*
-
-## Usage
+## Download
 Clone the repository
 __Using Git:__
 ```sh
@@ -23,10 +15,21 @@ cd taglio
 __By downloading the source code as an archive:__
 ```sh
 curl -fLO https://github.com/f4iey/taglio/archive/refs/heads/main.zip
+unzip main.zip
+cd taglio-main
 ```
 If you are not familiar with one of these below, just click the *Download ZIP* button under the `Code` dropdown button.
 
+## Before running
+To use this, you will of course need to have `Python` installed on your system with the following dependencies:
+__Using pip:__
+```sh
+pip install -r requirements.txt
+```
+*If your python libraries are already coped with your package manager, it is recommended to install these two libs using it.*
 For the program itself, all info are available in the help section by running `taglio` or `python taglio.py`
+
+### Usage and options
 ```sh
 Usage: taglio [OPTION] [PATH TO FILE]
 
@@ -42,6 +45,8 @@ Options:
   -s, --sounds          list config sound filenames
   -S, --save            save config in non-volatile memory
   -R, --reset           reset back to default FW config
+  -C WAVPATH, --convert=WAVPATH
+                        convert all wav files to raw
 ```
 
 
