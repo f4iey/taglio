@@ -1,5 +1,6 @@
 import serial
 import os
+import time
 from optparse import OptionParser
 from tqdm import tqdm
 import sox
@@ -139,6 +140,9 @@ if options.command:
 if len(args) > 0:
     for i in args:
         for audiofile in glob.glob(i):
+            # Open the serial port
+            if not ser.is_open:
+                ser.open()
             # Check if saber is writable
             send("WR?")
             if read().startswith("OK, Write Ready"):
@@ -154,7 +158,7 @@ if len(args) > 0:
                             print("Error: Not enough space left on device")
                             exit(1)
                     else:
-                        print("Protocol error")
+                        print("Free space query failed")
                         exit(1)
                     print("Writing: ", os.path.basename(audiofile), "to ", options.port)
                     print("Space left on saber: ", freespace)
@@ -169,6 +173,8 @@ if len(args) > 0:
                                 byte = f.read(1)
                                 pbar.update(1)
                         print("File ", os.path.basename(audiofile), " written to saber")
+                        ser.close()
+                        time.sleep(1)
                     else:
                         print("Protocol error")
             else:
