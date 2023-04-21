@@ -29,13 +29,14 @@ def convert_all(input_path):
     if not input_path.endswith('/'):
         input_path += '/'
     input_pattern = input_path + '*.wav'
-    output_pattern = input_path + '{}.RAW'
+    output_pattern = '{}.RAW'
     t = sox.Transformer()
     t.set_output_format(file_type='raw')
-    t.set_rate(44100)
+    t.convert(samplerate=44100)
     # loop over the input files and apply the transformation
     for input_file in glob.glob(input_pattern):
         output_file = output_pattern.format(os.path.splitext(input_file)[0])
+        print(input_file, " -> ", output_file)
         t.build(input_file, output_file)
 
 
