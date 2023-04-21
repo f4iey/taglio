@@ -31,7 +31,7 @@ For the program itself, all info are available in the help section by running `t
 
 ### Usage and options
 ```sh
-Usage: taglio [OPTION] [PATH TO FILE]
+Usage: taglio [OPTION] [PATHS TO FILES]
 
 Options:
   -h, --help            show this help message and exit

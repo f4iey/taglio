@@ -40,7 +40,7 @@ def convert_all(input_path):
         t.build(input_file, output_file)
 
 
-parser = OptionParser(usage='taglio [OPTION] [PATH TO FILE]')
+parser = OptionParser(usage='taglio [OPTION] [PATHS TO FILES]')
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
                   help="verbose display for debugging")
 parser.add_option("-i", "--info",
@@ -122,38 +122,39 @@ if options.command:
 
 # All options passed, we can send file if th file path has been specified
 if len(args) > 0:
-    for audiofile in glob.glob(args[0]):
-        # Check if saber is writable
-        send("WR?")
-        if read().startswith("OK, Write Ready"):
-            print("Saber ready to write to serial flash")
-            # Check if enough space is available
-            with open(audiofile, 'rb') as f:
-                fsize = os.path.getsize(audiofile)
-                send("FREE?")
-                response = read()
-                if response.startswith("FREE="):
-                    freespace = int(response[5:])
-                    if freespace < fsize:
-                        print("Error: Not enough space left on device")
+    for i in args:
+        for audiofile in glob.glob(i):
+            # Check if saber is writable
+            send("WR?")
+            if read().startswith("OK, Write Ready"):
+                print("Saber ready to write to serial flash")
+                # Check if enough space is available
+                with open(audiofile, 'rb') as f:
+                    fsize = os.path.getsize(audiofile)
+                    send("FREE?")
+                    response = read()
+                    if response.startswith("FREE="):
+                        freespace = int(response[5:])
+                        if freespace < fsize:
+                            print("Error: Not enough space left on device")
+                            exit(1)
+                    else:
+                        print("Protocol error")
                         exit(1)
-                else:
-                    print("Protocol error")
-                    exit(1)
-                print("Writing: ", os.path.basename(audiofile), "to ", options.port)
-                print("Space left on saber: ", freespace)
-                print("File size: ", fsize)
-                send("WR=" + os.path.basename(audiofile) + ',' + str(fsize))
-                if read().startswith('OK, Write'):
-                    byte = f.read(1)
-                    with tqdm(total=fsize) as pbar:
-                        while byte != b'':
-                            # send the file byte per byte to serial
-                            ser.write(byte)
-                            byte = f.read(1)
-                            pbar.update(1)
-                    print("File ", os.path.basename(audiofile), " written to saber")
-                else:
-                    print("Protocol error")
-        else:
-            print("Error: Saber not ready for writing!")
+                    print("Writing: ", os.path.basename(audiofile), "to ", options.port)
+                    print("Space left on saber: ", freespace)
+                    print("File size: ", fsize)
+                    send("WR=" + os.path.basename(audiofile) + ',' + str(fsize))
+                    if read().startswith('OK, Write'):
+                        byte = f.read(1)
+                        with tqdm(total=fsize) as pbar:
+                            while byte != b'':
+                                # send the file byte per byte to serial
+                                ser.write(byte)
+                                byte = f.read(1)
+                                pbar.update(1)
+                        print("File ", os.path.basename(audiofile), " written to saber")
+                    else:
+                        print("Protocol error")
+            else:
+                print("Error: Saber not ready for writing!")
