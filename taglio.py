@@ -37,6 +37,18 @@ def convert_all(input_path):
         output_file = output_pattern.format(os.path.splitext(input_file)[0])
         print(input_file, " -> ", output_file)
         t.build(input_file, output_file)
+def flash_fw(hexfile):
+    if os.system("tycmd --version") == 0:
+        os.system("tycmd list")
+        if input("Confirm firmware flash on device [y/N]?") == 'y':
+            print("Flashing firmware...")
+            os.system("tycmd upload " + hexfile)
+            print("Flash complete!")
+        else:
+            print("Operation aborted, exiting...")
+    else:
+        print("Error: tytools is not installed! Aborting...")
+    exit()
 
 
 parser = OptionParser(usage='taglio [OPTION] [PATHS TO FILES]')
@@ -56,12 +68,13 @@ parser.add_option("-s", "--sounds", action="store_true", dest="slist", default=F
 parser.add_option("-S", "--save", action="store_true", dest="save", default=False, help="save config in non-volatile memory")
 parser.add_option("-R", "--reset", action="store_true", dest="reset", default=False, help="reset back to default FW config")
 parser.add_option("-C", "--convert", action="store", dest="wavpath", default=False, type="string", help="convert all wav files to raw")
+parser.add_option("--flash-hex", action="store", dest="hexfile", default=False, type="string", help="flash the target firmware")
 parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.wavpath or options.verbose or options.slist or options.save or options.reset):
+if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.wavpath or options.hexfile or options.verbose or options.slist or options.save or options.reset):
     parser.print_help()
     exit()
 
@@ -71,6 +84,8 @@ if options.wavpath:
     print("All wav files have been converted to RAW")
     if len(args) == 0:
         exit()
+if options.hexfile:
+    flash_fw(options.hexfile)
 
 # Options requiring saber connection
 # first, try to open the serial port

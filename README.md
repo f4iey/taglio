@@ -47,6 +47,8 @@ Options:
   -R, --reset           reset back to default FW config
   -C WAVPATH, --convert=WAVPATH
                         convert all wav files to raw
+  --flash-hex=HEXFILE   flash the target firmware
+
 ```
 
 Wildcards and multiple entries are supported
