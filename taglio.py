@@ -60,7 +60,7 @@ def set_color(action, bank, rgbw):
     print_ack(out)
     
 def get_color(action, bank):
-    # Getts the action color (main/flash/swing) from the specified bank (0 to 7)
+    # Gets the action color (main/flash/swing) from the specified bank (0 to 7)
     prefix = action_format(action)
     print_ack(prefix + bank + '?')
 
@@ -97,9 +97,10 @@ parser.add_option("-R", "--reset", action="store_true", dest="reset", default=Fa
 parser.add_option("-C", "--convert", action="store", dest="wavpath", default=False, type="string", help="convert all wav files to raw")
 parser.add_option("--flash-hex", action="store", dest="hexfile", default=False, type="string", help="flash the target firmware")
 parser.add_option("--set-color", action="store", dest="color", default = False, type="string", help="sets a new color to target bank with decimal RGBW format (e.g --set-color 255,127,0,15)")
+parser.add_option("--get-color", action="store", dest="colorR", default = False, type="string", help="reads the current color from target bank with decimal RGBW format")
 parser.add_option("--color-bank", action="store", dest="bank", default='0', type="string", help="selects the target color bank (default 0)")
 parser.add_option("--color-action", action="store", dest="colorAction", default='main', type="string", help="selects the target color action (defaults to main)")
-parser.add_option("--color-fetch", action="store_true", dest="colorFetch", default=False, help="reads all the colors from the chosen action and bank")
+parser.add_option("--color-fetch", action="store_true", dest="colorFetch", default=False, help="reads all the colors from all banks for the target action")
 
 
 parser.set_defaults(port='/dev/ttyACM0')
@@ -107,7 +108,7 @@ parser.set_defaults(port='/dev/ttyACM0')
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.wavpath or options.hexfile or options.verbose or options.slist or options.save or options.reset or options.color or options.bank or options.colorAction or options.colorFetch):
+if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.wavpath or options.hexfile or options.verbose or options.slist or options.save or options.reset or options.color or options.colorR or options.bank or options.colorAction or options.colorFetch):
     parser.print_help()
     exit()
 
@@ -169,6 +170,8 @@ if options.command:
     print_multi(options.command)
 if options.color:
     set_color(options.colorAction, options.bank, options.color)
+if options.colorR:
+    get_color(options.colorAction, options.bank)
 if options.colorFetch:
     print_multi(action_format(options.colorAction) + '?')
 
