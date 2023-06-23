@@ -55,7 +55,7 @@ def set_color(action, bank, rgbw):
     # Sets the action color (main/flash/swing) to the specified bank (0 to 7)
     prefix = action_format(action).upper()
     out = prefix + bank
-    for i in rgbw.split(',')
+    for i in rgbw.split(','):
         out += hex(i)[2:]
     print_ack(out)
     
