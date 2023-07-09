@@ -1,6 +1,7 @@
 import serial
 import os
 import time
+from sys import argv
 from optparse import OptionParser
 from tqdm import tqdm
 import sox
@@ -120,7 +121,7 @@ else:
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(args) == 0:
+if len(argv) == 0:
     parser.print_help()
     exit()
 
