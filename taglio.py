@@ -109,13 +109,14 @@ parser.add_option("--color-bank", action="store", dest="bank", default='0', type
 parser.add_option("--color-action", action="store", dest="colorAction", default='main', type="string", help="selects the target color action (defaults to main)")
 parser.add_option("--color-fetch", action="store_true", dest="colorFetch", default=False, help="reads all the colors from all banks for the target action")
 parser.add_option("--preview", action="store", dest="preview", default = False, type="string", help="color preview with decimal RGBW format (e.g --preview 255,127,0,15)")
+parser.add_option("--switch-bank", action="store", dest="sBank", default = False, type="string", help="switch the active color bank (0-7)")
 
 parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(args) == 0 and not (options.info or options.list or options.erase or options.command or options.wavpath or options.hexfile or options.verbose or options.slist or options.save or options.reset or options.color or options.colorR or options.bank or options.colorAction or options.colorFetch):
+if options.help:
     parser.print_help()
     exit()
 
@@ -183,6 +184,13 @@ if options.colorFetch:
     print_multi(action_format(options.colorAction) + '?')
 if options.preview:
     preview_color(options.preview)
+if options.sBank:
+    print("Current bank: ", end='')
+    print_ack("B?")
+    if int(options.sBank) >= 0 and int(options.sBank) < 8:
+        print_ack("B=" + options.sBank)
+    else:
+        print("Specified bank out of bounds. Aborting...")
 
 # All options passed, we can send file if th file path has been specified
 if len(args) > 0:
