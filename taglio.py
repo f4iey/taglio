@@ -86,6 +86,8 @@ def action_format(action):
     return prefix
 
 parser = OptionParser(usage='taglio [OPTION] [PATHS TO FILES]')
+parser.add_option("-h", "--help", action="store_true", dest="help", default=False,
+                  help="show this help message and exit")
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
                   help="verbose display for debugging")
 parser.add_option("-i", "--info",
@@ -116,7 +118,7 @@ parser.set_defaults(port='/dev/ttyACM0')
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if options.help:
+if options.help or len(args) == 0:
     parser.print_help()
     exit()
 
