@@ -57,7 +57,7 @@ def set_color(action, bank, rgbw):
     prefix = action_format(action).upper()
     out = prefix + bank + '='
     for i in rgbw.split(','):
-        out += hex(int(i))[2:]
+        out += format(int(i), '02x')
     print_ack(out)
     
 def get_color(action, bank):
@@ -69,7 +69,7 @@ def preview_color(rgbw):
     # displays the input color in R,G,B,W
     out = 'P='
     for i in rgbw.split(','):
-        out += hex(int(i))[2:]
+        out += format(int(i), '02x')
     print_ack(out)
 
 def action_format(action):
