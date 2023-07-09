@@ -111,7 +111,11 @@ parser.add_option("--color-fetch", action="store_true", dest="colorFetch", defau
 parser.add_option("--preview", action="store", dest="preview", default = False, type="string", help="color preview with decimal RGBW format (e.g --preview 255,127,0,15)")
 parser.add_option("--switch-bank", action="store", dest="sBank", default = False, type="string", help="switch the active color bank (0-7)")
 
-parser.set_defaults(port='/dev/ttyACM0')
+# Kernel detection
+if os.name == 'nt':
+    parser.set_defaults(port='COM3')
+else:
+    parser.set_defaults(port='/dev/ttyACM0')
 
 (options, args) = parser.parse_args()
 
