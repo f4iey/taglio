@@ -50,6 +50,19 @@ Options:
   -C WAVPATH, --convert=WAVPATH
                         convert all wav files to raw
   --flash-hex=HEXFILE   flash the target firmware
+  --set-color=COLOR     sets a new color to target bank with decimal RGBW
+                        format (e.g --set-color 255,127,0,15)
+  --get-color=COLORR    reads the current color from target bank with decimal
+                        RGBW format
+  --color-bank=BANK     selects the target color bank (default 0)
+  --color-action=COLORACTION
+                        selects the target color action (defaults to main)
+  --color-fetch         reads all the colors from all banks for the target
+                        action
+  --preview=PREVIEW     color preview with decimal RGBW format (e.g --preview
+                        255,127,0,15)
+  --switch-bank=SBANK   switch the active color bank (0-7)
+
 
 ```
 
