@@ -54,7 +54,7 @@ def flash_fw(hexfile):
 def set_color(action, bank, rgbw):
     # Sets the action color (main/flash/swing) to the specified bank (0 to 7)
     prefix = action_format(action).upper()
-    out = prefix + bank
+    out = prefix + bank + '='
     for i in rgbw.split(','):
         out += hex(i)[2:]
     print_ack(out)
@@ -63,6 +63,13 @@ def get_color(action, bank):
     # Gets the action color (main/flash/swing) from the specified bank (0 to 7)
     prefix = action_format(action)
     print_ack(prefix + bank + '?')
+
+def preview_color(rgbw):
+    # displays the input color in R,G,B,W
+    out = 'P='
+    for i in rgbw.split(','):
+        out += hex(i)[2:]
+    print_ack(out)
 
 def action_format(action):
     prefix = ''
@@ -101,7 +108,7 @@ parser.add_option("--get-color", action="store", dest="colorR", default = False,
 parser.add_option("--color-bank", action="store", dest="bank", default='0', type="string", help="selects the target color bank (default 0)")
 parser.add_option("--color-action", action="store", dest="colorAction", default='main', type="string", help="selects the target color action (defaults to main)")
 parser.add_option("--color-fetch", action="store_true", dest="colorFetch", default=False, help="reads all the colors from all banks for the target action")
-
+parser.add_option("--preview", action="store", dest="preview", default = False, type="string", help="color preview with decimal RGBW format (e.g --preview 255,127,0,15)")
 
 parser.set_defaults(port='/dev/ttyACM0')
 
@@ -174,6 +181,8 @@ if options.colorR:
     get_color(options.colorAction, options.bank)
 if options.colorFetch:
     print_multi(action_format(options.colorAction) + '?')
+if options.preview:
+    preview_color(options.preview)
 
 # All options passed, we can send file if th file path has been specified
 if len(args) > 0:
