@@ -121,7 +121,7 @@ else:
 (options, args) = parser.parse_args()
 
 # Check if the help option was specified
-if len(argv) == 0:
+if len(argv) == 1:
     parser.print_help()
     exit()
 
