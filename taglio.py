@@ -4,7 +4,7 @@ import time
 from sys import argv
 from optparse import OptionParser
 from tqdm import tqdm
-import sox
+from pydub import AudioSegment
 import glob
 
 # functions
@@ -32,13 +32,12 @@ def convert_all(input_path):
         input_path += '/'
     input_pattern = input_path + '*.wav'
     output_pattern = '{}.RAW'
-    t = sox.Transformer()
-    t.set_output_format(file_type='raw', bits=16, channels=1, rate=44100)
     # loop over the input files and apply the transformation
     for input_file in glob.glob(input_pattern):
+        audio = AudioSegment.from_file(input_file, format="wav")
+        audio = audio.set_frame_rate(44100)
         output_file = output_pattern.format(os.path.splitext(input_file)[0])
-        print(input_file, " -> ", output_file)
-        t.build(input_file, output_file)
+        audio.export(output_file, format="raw", bits=16, channels=1)
 def flash_fw(hexfile):
     if os.system("tycmd --version") == 0:
         os.system("tycmd list")
