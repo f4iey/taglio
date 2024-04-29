@@ -36,8 +36,10 @@ def convert_all(input_path):
     for input_file in glob.glob(input_pattern):
         audio = AudioSegment.from_file(input_file, format="wav")
         audio = audio.set_frame_rate(44100)
+        audio = audio.set_channels(1)
+        audio = audio.set_sample_width(2)
         output_file = output_pattern.format(os.path.splitext(input_file)[0])
-        audio.export(output_file, format="raw", bits=16, channels=1)
+        audio.export(output_file, format="raw")
 def flash_fw(hexfile):
     if os.system("tycmd --version") == 0:
         os.system("tycmd list")
